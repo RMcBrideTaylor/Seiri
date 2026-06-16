@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import 'material-icons/iconfont/material-icons.css';
+
+@theme {
+  --color-flat-black-100: #272727;
+  --color-flat-black-500: #1B1B1B;
+  --color-flat-black-950: #181818;
+}

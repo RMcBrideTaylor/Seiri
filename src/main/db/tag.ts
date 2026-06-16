@@ -1,0 +1,19 @@
+import { sql } from 'drizzle-orm'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { files } from './file'
+
+export const tags = sqliteTable('tags', {
+  id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  name: text(),
+  created: integer({ mode: 'timestamp' }).default(sql`(CURRENT_TIMESTAMP)`)
+})
+
+export const tags_to_files = sqliteTable('tags_files', {
+  id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  projectId: integer('tag_id')
+    .notNull()
+    .references(() => tags.id, { onDelete: 'cascade' }),
+  fileId: integer('file_id')
+    .notNull()
+    .references(() => files.id, { onDelete: 'cascade' })
+})
