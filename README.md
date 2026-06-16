@@ -1,6 +1,20 @@
-# seiri
+# Seiri
+-----
 
-An Electron application with Vue and TypeScript
+In the process of learning art, I've often found myself in situations where I need to curate collections of references images. Existing services all either demand you hand over data, lack features I want, or are constantly being flooded withAI photos, so I thought I'd go ahead and make my own.
+
+Enter Seiri. The objective is to create an application that lets me use the existing data storage that I've already paid for and have thousands of images stored in without having to pay for a separate service.
+
+I started with Electron because it's an easy jumping off point to quickly get something that runs on Windows/Linux/Mac, but at some point I intend to do native versions as well as a mobile edition if interest is shown.
+
+Some wishlist items of things I intend to do soon:
+- [ ] JPEG, PNG, GIF support in the library
+
+Some things that I think are further out and not for an initial release:
+
+
+-----
+# Developer Notes
 
 ## Recommended IDE Setup
 
