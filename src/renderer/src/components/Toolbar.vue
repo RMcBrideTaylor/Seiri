@@ -29,24 +29,24 @@ const removeFilter = (f): void => {
     <div class="flex flex-row">
       <div class="md:w-1/5">
         <button
-          class="dark:bg-flat-black-500 dark:hover:bg-flat-black-100 cursor-pointer rounded-full p-2"
+          class="bg-red-500 hover:bg-red-600 text-white dark:bg-flat-black-500 dark:hover:bg-flat-black-100 cursor-pointer rounded-full p-2"
           @click="$emit('collapse')"
         >
           <span class="material-icons" style="vertical-align: middle">menu</span>
         </button>
       </div>
-      <div class="w-3/5 flex flex-row justify-start gap-2 overflow-x-scroll">
+      <div class="w-3/5 flex flex-row justify-start gap-2">
         <input
           v-model="filter"
           placeholder="Filter"
-          class="text-center p-2 rounded-full dark:bg-flat-black-500 dark:hover:bg-flat-black-100 focus:outline focus:outline-red-500"
+          class="text-center p-2 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-flat-black-500 dark:hover:bg-flat-black-100 focus:outline focus:outline-red-500"
           @keydown.enter="addFilter"
         />
 
         <button
           v-for="(f, i) in filters"
           :key="i"
-          class="bg-red-500 cursor-pointer py-2 px-3 rounded-2xl"
+          class="bg-red-500 cursor-pointer py-2 px-3 rounded-full text-white"
           @click="removeFilter(f)"
         >
           {{ f }}
@@ -54,7 +54,7 @@ const removeFilter = (f): void => {
       </div>
       <div class="w-1/5 flex flex-row-reverse">
         <button
-          class="dark:bg-flat-black-500 dark:hover:bg-flat-black-100 cursor-pointer rounded-full p-2"
+          class="bg-gray-100 hover:bg-gray-200 dark:bg-flat-black-500 dark:hover:bg-flat-black-100 cursor-pointer rounded-full p-2"
           @click="$emit('refresh')"
         >
           <span class="material-icons" style="vertical-align: middle">refresh</span>

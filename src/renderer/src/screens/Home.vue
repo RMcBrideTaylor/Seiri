@@ -72,7 +72,7 @@ const collapse = (): void => {
 // IPC Calls
 const listFiles = (): void => {
   window.electron.ipcRenderer.invoke('action:listFiles').then((res) => {
-    files.value = res
+    files.value = res.toReversed()
     filesLoading.value = false
   })
 }

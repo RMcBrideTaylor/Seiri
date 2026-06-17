@@ -23,7 +23,7 @@ const rightClick = (): void => {
     @contextmenu.prevent="rightClick"
     @click="$emit('open', props.file.id)"
   >
-    <div class="hidden absolute bottom-0 left-0 right-0 p-2 bg-black/30">
+    <div class="hidden absolute bottom-0 left-0 right-0 p-2 bg-black/30 text-white">
       <p>
         Rating:
         <button

@@ -41,12 +41,12 @@ const saveNew = (): void => {
 <template>
   <div class="h-screen flex justify-center items-center">
     <div
-      class="flex justify-center py-8 dark:bg-flat-black-500 w-lg h-1/2 rounded-3xl shadow-(--shadow-even)"
+      class="flex justify-center py-8 bg-gray-100 dark:bg-flat-black-500 w-lg h-1/2 rounded-3xl shadow-xl"
     >
       <div v-if="state == ScreenState.creating" class="flex flex-col gap-8 w-5/6">
         <div class="w-3/4 mx-auto">
           <button
-            class="w-full text-white/60 px-4 py-3 text-center text-lg rounded-2xl cursor-pointer hover:dark:bg-flat-black-100"
+            class="w-full text-red-500 dark:text-white/60 px-4 py-3 text-center text-lg rounded-2xl cursor-pointer hover:bg-gray-200 hover:dark:bg-flat-black-100"
             @click="openExisting"
           >
             <span class="material-icons" style="vertical-align: middle">assignment</span>
@@ -54,7 +54,7 @@ const saveNew = (): void => {
           </button>
           <p class="text-center my-3">or</p>
           <button
-            class="w-full text-white/60 px-4 py-3 text-center text-lg rounded-2xl cursor-pointer hover:dark:bg-flat-black-100"
+            class="w-full text-red-500 dark:text-white/60 px-4 py-3 text-center text-lg rounded-2xl cursor-pointer hover:bg-gray-200 hover:dark:bg-flat-black-100"
             @click="createNew"
           >
             <span class="material-icons" style="vertical-align: middle">folder</span>
@@ -93,7 +93,7 @@ const saveNew = (): void => {
 
         <div>
           <button
-            class="p-2 px-4 rounded-full dark:bg-flat-black-100 cursor-pointer"
+            class="p-2 px-4 rounded-full bg-red-500 text-white dark:bg-flat-black-100 cursor-pointer"
             @click="saveNew"
           >
             Save

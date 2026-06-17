@@ -1,5 +1,6 @@
 # Seiri
 -----
+![Screenshot of the app interface](resources/screenshot.png)
 
 In the process of learning art, I've often found myself in situations where I need to curate collections of references images. Existing services all either demand you hand over data, lack features I want, or are constantly being flooded withAI photos, so I thought I'd go ahead and make my own.
 
@@ -16,6 +17,7 @@ I started with Electron because it's an easy jumping off point to quickly get so
 - [ ] Image tagging and search
 - [ ] Light mode / theming 
 - [ ] Re-write in a more event-based manner to intelligently trigger re-indexing when needed 
+- [ ] Pull in metadata from images if available
 
 
 **Some things that I think are further out and not for an initial release:**

@@ -63,10 +63,10 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div v-if="file" class="w-full h-screen overflow-hidden static bg-black">
+  <div v-if="file" class="w-full h-screen overflow-hidden static bg-black text-white">
     <div class="absolute w-full top-0 flex flex-row-reverse py-3 z-50">
       <button
-        :class="{ 'bg-red-500': showingMenu, 'dark:bg-flat-black-100': !showingMenu }"
+        :class="{ 'bg-red-500': showingMenu, 'bg-flat-black-100': !showingMenu }"
         class="p-1 rounded-l-xl cursor-pointer"
         @click="toggleMenu"
       >
@@ -76,14 +76,14 @@ onMounted(() => {
     <Transition>
       <div
         v-if="showingMenu"
-        class="absolute right-4 top-4 bottom-4 px-6 dark:bg-flat-black-500/70 z-10 pt-16 w-96 flex flex-col gap-4 rounded-3xl"
+        class="absolute right-4 top-4 bottom-4 px-6 bg-flat-black-500/70 z-10 pt-16 w-96 flex flex-col gap-4 rounded-3xl"
       >
         <div>
           <label class="mb-4"><b>File</b></label>
           <input
             :value="file.path.split('/').filter(Boolean).at(-1)"
             disabled
-            class="w-full dark:bg-flat-black-500 rounded-2xl p-2 text-center"
+            class="w-full bg-flat-black-500 rounded-2xl p-2 text-center"
           />
         </div>
         <div>
@@ -102,7 +102,7 @@ onMounted(() => {
           <input
             v-model="newTag"
             placeholder="add tag"
-            class="w-full dark:bg-flat-black-100 rounded-2xl p-2 text-center focus:outline focus:outline-red-500"
+            class="w-full bg-flat-black-100 rounded-2xl p-2 text-center focus:outline focus:outline-red-500"
             @keydown.enter="addTag"
           />
           <div class="flex flex-row my-4">

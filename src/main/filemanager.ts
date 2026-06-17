@@ -125,7 +125,11 @@ export class FileManager {
           hash: hash
         })
       }
+
+      // @TODO - Clear out any files that no longer exist in the index
     }
+
+    
     return
   }
 
