@@ -2,7 +2,7 @@
 import Sidebar from '../components/Sidebar.vue'
 import Toolbar from '../components/Toolbar.vue'
 import Feed from '../components/Feed.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 enum ScreenState {
   loading,
@@ -15,13 +15,20 @@ interface File {
   hash: string
   indexed: Date
   rating: number
+  tags: Tag[]
+}
+
+interface Tag {
+  id: number
+  name: string
 }
 
 const files = ref<File[]>([])
 const filesLoading = ref(true)
 const showMenu = ref(true)
+const filters = ref<string[]>([])
 
-var state = ref(ScreenState.loading)
+const state = ref(ScreenState.loading)
 
 const reIndex = (): void => {
   window.electron.ipcRenderer.invoke('action:indexFiles').then(() => {
@@ -32,13 +39,15 @@ const reIndex = (): void => {
 onMounted(() => reIndex())
 
 // Event Handlers
-const filter = (filter): void => {
-
+const addFilter = (filter): void => {
+  filters.value.push(filter)
 }
 
-const search = (search): void => {
-  
+const removeFilter = (filter): void => {
+  filters.value = filters.value.filter((i) => i != filter)
 }
+
+const search = (search): void => {}
 
 const open = (fileId): void => {
   window.electron.ipcRenderer.send('action:openPreview', fileId)
@@ -68,6 +77,14 @@ const listFiles = (): void => {
   })
 }
 
+const feed = computed(() => {
+  var values = files.value
+  if (filters.value.length > 0) {
+    values = values.filter((i) => i.tags.flatMap((m) => m.name).some((a) => filters.value.includes(a)))
+  }
+  return values
+})
+
 onMounted(() => {
   listFiles()
 })
@@ -75,12 +92,18 @@ onMounted(() => {
 
 <template>
   <div class="absolute bottom-0 top-0 left-0 right-0 p-8 flex flex-col gap-4">
-    <Toolbar @collapse="collapse" @filter="filter" @refresh="refresh" @search="search" />
-    <div class="grow flex flex-row overflow-hidden">
+    <Toolbar
+      @collapse="collapse"
+      @add-filter="addFilter"
+      @remove-filter="removeFilter"
+      @refresh="refresh"
+      @search="search"
+    />
+    <div class="grow flex flex-col md:flex-row overflow-hidden">
       <Transition>
-      <Sidebar v-if="showMenu" />
+        <Sidebar v-if="showMenu" />
       </Transition>
-      <Feed v-model="files" @rate="rate" @open="open" />
+      <Feed v-model="feed" @rate="rate" @open="open" />
     </div>
   </div>
 </template>

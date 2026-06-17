@@ -34,8 +34,9 @@ const open = (fileId): void => {
 </script>
 
 <template>
-  <div class="w-4/5 mx-auto overflow-y-auto">
-    <div class="grid grid-cols-3 gap-4 overflow-y-scroll p-6">
+  <div class="md:w-4/5 mx-auto overflow-y-auto">
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-scroll p-6">
       <div>
         <TransitionGroup name="collection1" tag="div" class="flex flex-col gap-4">
           <div v-for="(file, index) in collection1" :key="index">

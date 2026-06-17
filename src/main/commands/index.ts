@@ -1,4 +1,5 @@
 // Actions
+import addTag from './action/addTag'
 import indexFiles from './action/indexFiles'
 import listDirectories from './action/listDirectories'
 import listFiles from './action/listFiles'
@@ -18,6 +19,8 @@ export default function registerCommands(): void {
   rateFile()
   openFile()
   openPreview()
+
+  addTag()
 
   newCollection()
   openCollection()

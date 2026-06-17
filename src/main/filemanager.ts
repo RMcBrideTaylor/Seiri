@@ -4,11 +4,14 @@ import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
 import { eq, like, and } from 'drizzle-orm'
 
 import { files } from './db/file'
+import { filesToTags, tags } from './db/tag'
 
 import { createReadStream } from 'node:fs'
 import path from 'node:path'
 import { createHash } from 'node:crypto'
 import { glob } from 'node:fs/promises'
+
+import { relations } from './db/relations'
 
 export class FileManager {
   private static instance: FileManager | null = null
@@ -28,7 +31,7 @@ export class FileManager {
     new Database(location, { verbose: console.log })
 
     // Load sqlite file onto the active connection
-    this.db = drizzle(location)
+    this.db = drizzle(location, { relations: relations })
     this.directory = dest[0]
 
     // Trigger initial migrations in the background
@@ -43,8 +46,35 @@ export class FileManager {
   }
 
   loadCollection(dest: string): void {
-    this.db = drizzle(dest)
+    this.db = drizzle(dest, { relations: relations })
     this.directory = path.dirname(dest)
+  }
+
+  async addTag(id: number, tag: string): Promise<Tag> {
+    if (this.db == null || this.directory == null) {
+      process.exit(1)
+    }
+
+    // Check if tag already exists
+    let t = await this.db.select().from(tags).where(eq(tags.name, tag))
+    if (t.length == 0) {
+      // If not create it
+
+      t = await this.db
+        .insert(tags)
+        .values({
+          name: tag
+        })
+        .returning()
+    }
+
+    // Associate it with the file by id
+    await this.db.insert(filesToTags).values({
+      fileId: id,
+      tagId: t[0].id
+    })
+
+    return t[0]
   }
 
   async getFile(id): Promise<File> {
@@ -52,14 +82,21 @@ export class FileManager {
       process.exit(1)
     }
 
-    const res = (await this.db.select().from(files).where(eq(files.id, id))).map((i) => {
+    const res = await this.db.query.files.findMany({
+      where: {
+        id: id
+      },
+      with: {
+        tags: true
+      }
+    })
+
+    return res.map((i) => {
       return {
         ...i,
         path: this.directory + '/' + i.path
       }
-    })
-
-    return res[0]
+    })[0]
   }
 
   async indexFiles(): Promise<void> {
@@ -95,7 +132,12 @@ export class FileManager {
   async listFiles(): Promise<File[]> {
     if (!this.directory || !this.db) process.exit(1)
 
-    const res = await this.db.select().from(files)
+    const res = await this.db.query.files.findMany({
+      with: {
+        tags: true
+      }
+    })
+
     return res.map((i) => {
       return {
         ...i,
@@ -182,4 +224,10 @@ type File = {
   hash: string
   indexed: Date
   rating: number
+}
+
+type Tag = {
+  id: number
+  name: string
+  created: Date
 }

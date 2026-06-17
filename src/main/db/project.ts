@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { files } from './file'
 
@@ -8,7 +8,7 @@ export const projects = sqliteTable('projects', {
   created: integer({ mode: 'timestamp' }).default(sql`(CURRENT_TIMESTAMP)`)
 })
 
-export const projects_to_files = sqliteTable('projects_files', {
+export const filesToProjects = sqliteTable('projects_files', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   projectId: integer('project_id')
     .notNull()

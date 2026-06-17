@@ -8,9 +8,9 @@ export const tags = sqliteTable('tags', {
   created: integer({ mode: 'timestamp' }).default(sql`(CURRENT_TIMESTAMP)`)
 })
 
-export const tags_to_files = sqliteTable('tags_files', {
+export const filesToTags = sqliteTable('tags_files', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
-  projectId: integer('tag_id')
+  tagId: integer('tag_id')
     .notNull()
     .references(() => tags.id, { onDelete: 'cascade' }),
   fileId: integer('file_id')
