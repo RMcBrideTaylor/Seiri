@@ -21,7 +21,6 @@ const rightClick = (): void => {
   <button
     class="relative rounded-xl overflow-hidden transition delay-150 duration-300 ease-in-out hover:scale-105 hover:[&>div]:block cursor-pointer"
     @contextmenu.prevent="rightClick"
-    @click="$emit('open', props.file.id)"
   >
     <div class="hidden absolute bottom-0 left-0 right-0 p-2 bg-black/30 text-white">
       <p>
@@ -31,12 +30,12 @@ const rightClick = (): void => {
           :key="n"
           :value="n"
           class="cursor-pointer"
-          @click="$emit('rate', { id: props.file.id, rating: $event })"
+          @click.prevent="$emit('rate', { id: props.file.id, rating: $event })"
         >
           {{ props.file.rating >= n ? '⭐' : '★' }}
         </button>
       </p>
     </div>
-    <img :src="'smag://' + props.file.path" />
+    <img :src="'smag://' + props.file.path" @click="$emit('open', props.file.id)" />
   </button>
 </template>
