@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 
 var isLoaded = ref(false)
-//const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 </script>
 
 <template>
@@ -22,7 +21,6 @@ var isLoaded = ref(false)
 body {
   @apply dark:bg-flat-black-950;
   @apply dark:text-white;
-  @apply p-4;
 }
 
 .v-enter-active,

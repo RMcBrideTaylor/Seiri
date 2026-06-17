@@ -12,5 +12,5 @@ export const files = sqliteTable(
       .notNull(),
     rating: integer().default(0).notNull()
   },
-  (table) => [check('rating_check', sql`${table.rating} < 5`)]
+  (table) => [check('rating_check', sql`0 < ${table.rating} < 6`)]
 )

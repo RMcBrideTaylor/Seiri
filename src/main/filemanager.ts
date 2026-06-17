@@ -47,6 +47,21 @@ export class FileManager {
     this.directory = path.dirname(dest)
   }
 
+  async getFile(id): Promise<File> {
+    if (this.db == null || this.directory == null) {
+      process.exit(1)
+    }
+
+    const res = (await this.db.select().from(files).where(eq(files.id, id))).map((i) => {
+      return {
+        ...i,
+        path: this.directory + '/' + i.path
+      }
+    })
+
+    return res[0]
+  }
+
   async indexFiles(): Promise<void> {
     if (this.db == null || this.directory == null) {
       process.exit(1)
@@ -87,6 +102,17 @@ export class FileManager {
         path: this.directory + '/' + i.path
       }
     })
+  }
+
+  async rateFile(rate): Promise<File[]> {
+    if (!this.directory || !this.db) process.exit(1)
+
+    const res = await this.db
+      .update(files)
+      .set({ rating: rate.rating })
+      .where(eq(files.id, rate.id))
+      .returning()
+    return res
   }
 
   async listDirectories(): Promise<Directory[]> {

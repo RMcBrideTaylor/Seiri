@@ -40,6 +40,17 @@ const search = (search): void => {
   
 }
 
+const open = (fileId): void => {
+  window.electron.ipcRenderer.send('action:openPreview', fileId)
+}
+
+const rate = (rate): void => {
+  window.electron.ipcRenderer.invoke('action:rateFile', rate).then((res) => {
+    const id = files.value.findIndex((i) => i.id == rate.id)
+    files.value[id].rating = rate.rating
+  })
+}
+
 const refresh = (): void => {
   console.log('Refreshing...')
   listFiles()
@@ -69,7 +80,7 @@ onMounted(() => {
       <Transition>
       <Sidebar v-if="showMenu" />
       </Transition>
-      <Feed v-model="files" />
+      <Feed v-model="files" @rate="rate" @open="open" />
     </div>
   </div>
 </template>

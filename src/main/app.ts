@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, protocol, net } from 'electron'
+import { app, shell, BrowserWindow, protocol, net, Menu } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -33,7 +33,6 @@ export default class SeiriApp {
       console.log('IPC Registered...')
 
       this.mainWindow = this.createWindow()
-      console.log(this.createWindow())
       console.log('Window Created.')
     })
   }
@@ -67,8 +66,6 @@ export default class SeiriApp {
         sandbox: false
       }
     })
-
-    mainWindow.webContents.on('context-menu', (_event, params) => {})
 
     mainWindow.webContents.setWindowOpenHandler((details) => {
       shell.openExternal(details.url)

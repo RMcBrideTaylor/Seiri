@@ -1,10 +1,10 @@
 CREATE TABLE `files` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`path` text,
-	`hash` text,
-	`indexed` integer DEFAULT (CURRENT_TIMESTAMP),
-	`rating` integer DEFAULT 0,
-	CONSTRAINT "rating_check" CHECK("files"."rating" < 5)
+	`path` text NOT NULL,
+	`hash` text NOT NULL,
+	`indexed` integer DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`rating` integer DEFAULT 0 NOT NULL,
+	CONSTRAINT "rating_check" CHECK(0 < "files"."rating" < 6)
 );
 --> statement-breakpoint
 CREATE TABLE `projects` (

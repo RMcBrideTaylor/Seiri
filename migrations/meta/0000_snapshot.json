@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "eee28b13-74ad-4ef0-aa90-8d942f438fb5",
+  "id": "343915fd-9681-4cc0-87db-2c55d36fcb57",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "files": {
@@ -18,21 +18,21 @@
           "name": "path",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "hash": {
           "name": "hash",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "indexed": {
           "name": "indexed",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": "(CURRENT_TIMESTAMP)"
         },
@@ -40,7 +40,7 @@
           "name": "rating",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false,
           "default": 0
         }
@@ -52,7 +52,7 @@
       "checkConstraints": {
         "rating_check": {
           "name": "rating_check",
-          "value": "\"files\".\"rating\" < 5"
+          "value": "0 < \"files\".\"rating\" < 6"
         }
       }
     },
