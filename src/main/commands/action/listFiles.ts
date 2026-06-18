@@ -7,7 +7,6 @@ export default function listFiles(): void {
     const fileManager = FileManager.getInstance()
 
     // Trigger Index, then list the result
-    await fileManager.indexFiles()
     return await fileManager.listFiles()
   })
 }

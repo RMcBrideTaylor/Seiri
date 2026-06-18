@@ -12,6 +12,7 @@ I started with Electron because it's an easy jumping off point to quickly get so
 
 **Some wishlist items of things I intend to do soon:**
 - [ ] JPEG, PNG, GIF support
+- [ ] Load as a stream to decrease initial load with large libraries
 - [ ] Grid resizing in the main feed
 - [x] The ability to filter photos by containing folder
 - [ ] Dynamic re-indexing through watched folder

@@ -122,6 +122,7 @@ export class FileManager {
       this.directory + '/**/*.webp',
       this.directory + '/**/*.gif',
       this.directory + '/**/*.jpeg',
+      this.directory + '/**/*.jpg',
       this.directory + '/**/*.png',
       this.directory + '/**/*.svg'
     ])) {
@@ -133,6 +134,7 @@ export class FileManager {
         .where(and(eq(files.hash, hash), like(files.path, '%' + path.basename(file) + '%')))
 
       if (matches.length < 1) {
+        console.log('Indexing: ' + file)
         await this.db.insert(files).values({
           path: path.relative(this.directory, file),
           hash: hash
@@ -193,19 +195,24 @@ export class FileManager {
     }
 
     // Sort by longest path
-    directories.sort((a, b) => b.path.length - a.path.length)
+    directories.sort((a, b) => b.path.split('/').length - a.path.split('/').length)
+    console.log(directories)
+    console.log('-------')
 
-    for (const [i, directory] of directories.entries()) {
+    let index = 0
+    for (const directory of [...directories]) {
+      console.log(directory)
       // Only look for nested paths so we can skip checking *every* path against every other one
       if (directory.path.includes('/')) {
         // Check if directories list contains the path minus the last section
-        const index = directories.findIndex((d) => d.path == path.dirname(directory.path))
+        const loc = directories.findIndex((d) => d.path == path.dirname(directory.path))
 
-        if (index) {
-          directories[index].children.push(directory)
-          directories.splice(i, 1)
+        if (loc) {
+          directories[loc].children.push(directory)
+          directories.splice(index, 1)
         }
       }
+      index = index + 1
     }
     directories.sort((a, b) => a.path.length - b.path.length)
 

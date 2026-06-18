@@ -2,6 +2,7 @@
 import Sidebar from '../components/Sidebar.vue'
 import Toolbar from '../components/Toolbar.vue'
 import Feed from '../components/Feed.vue'
+import Loading from '../components/Loading.vue'
 import { computed, onMounted, ref } from 'vue'
 
 enum ScreenState {
@@ -53,7 +54,7 @@ const search = (search): void => {
 }
 
 const searchPath = (path): void => {
-  searchString.value = path
+  searchString.value = path + '/'
 }
 
 const open = (fileId): void => {
@@ -121,7 +122,8 @@ window.electron.ipcRenderer.on('refresh', () => {
       <Transition>
         <Sidebar v-if="showMenu" @search-path="searchPath" />
       </Transition>
-      <Feed v-model="feed" @rate="rate" @open="open" />
+      <Feed v-if="!filesLoading" v-model="feed" @rate="rate" @open="open" />
+      <Loading v-else />
     </div>
   </div>
 </template>

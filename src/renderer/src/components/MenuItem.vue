@@ -26,7 +26,7 @@ const searchPath = (path): void => {
   </button>
   <div v-if="props.directory.children.length > 0" class="flex flex-row">
     <div class="bg-red-500 dark:bg-white/60 mx-2" style="width: 2px;"></div>
-    <div v-if="props.depth < 4">
+    <div v-if="props.depth < 3">
       <MenuItem
         v-for="(child, index) in props.directory.children"
         :key="index"
