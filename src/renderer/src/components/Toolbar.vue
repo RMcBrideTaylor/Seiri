@@ -50,6 +50,7 @@ const removeFilter = (f): void => {
           @click="removeFilter(f)"
         >
           {{ f }}
+          <span class="material-icons" style="vertical-align: bottom">close</span>
         </button>
       </div>
       <div class="w-1/5 flex flex-row-reverse">
