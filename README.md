@@ -1,8 +1,8 @@
-# Seiri
+# Seiri (alpha)
 
 ![Screenshot of the app interface](resources/screenshot.png)
 
-In the process of learning art, I've often found myself in situations where I need to curate collections of references images. Existing services all either demand you hand over data, lack features I want, or are constantly being flooded withAI photos, so I thought I'd go ahead and make my own.
+In the process of learning art, I've often found myself in situations where I need to curate collections of references images. Existing services all either demand you hand over data, lack features I need, or are constantly being flooded with AI photos, so I thought I'd go ahead and make my own.
 
 Enter Seiri. The objective is to create an application that lets me use the existing data storage that I've already paid for and have thousands of images stored in without having to pay for a separate service.
 
