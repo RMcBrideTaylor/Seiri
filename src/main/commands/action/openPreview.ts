@@ -12,6 +12,7 @@ export default function openPreview(): void {
       show: true,
       titleBarStyle: 'hidden',
       autoHideMenuBar: true,
+      title: 'Preview',
       ...(process.platform === 'linux' ? { icon } : {}),
       webPreferences: {
         preload: join(__dirname, '../preload/index.js'),

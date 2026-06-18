@@ -2512,6 +2512,13 @@ esutils@^2.0.2:
   resolved "https://registry.npmjs.org/esutils/-/esutils-2.0.3.tgz"
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
+exifreader@^4.41.0:
+  version "4.41.0"
+  resolved "https://registry.yarnpkg.com/exifreader/-/exifreader-4.41.0.tgz#a463c0ad484243a20c44e165ee7e3bedf13e7af7"
+  integrity sha512-P3nPeh6GWs5D5RZdRZ6q/LorHPmmeDgKsowduqRabtTFiqMD2bc5eTN+Dhq00O9BCuV2eksu3oOJh4ZaZvkK0A==
+  optionalDependencies:
+    "@xmldom/xmldom" "^0.9.10"
+
 expand-template@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"

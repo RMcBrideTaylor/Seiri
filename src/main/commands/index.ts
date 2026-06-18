@@ -6,6 +6,8 @@ import listFiles from './action/listFiles'
 import openFile from './action/openFile'
 import openPreview from './action/openPreview'
 import rateFile from './action/rateFile'
+import readFile from './action/readFile'
+import refresh from './action/refresh'
 import removeTag from './action/removeTag'
 
 // Dialogs
@@ -20,9 +22,12 @@ export default function registerCommands(): void {
   rateFile()
   openFile()
   openPreview()
+  readFile()
 
   addTag()
   removeTag()
+
+  refresh()
 
   newCollection()
   openCollection()

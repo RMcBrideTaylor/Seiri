@@ -2,6 +2,7 @@
 interface Directory {
   name: string
   path: string
+  fullPath: string
   children: Directory[]
 }
 
@@ -10,9 +11,17 @@ const props = defineProps<{
   depth: number
 }>()
 
+const emit = defineEmits(['searchPath'])
+
+const searchPath = (path): void => {
+  emit('searchPath', path)
+}
 </script>
 <template>
-  <button class="w-full p-2 hover:bg-gray-100 hover:dark:bg-flat-black-100 text-left rounded-xl">
+  <button
+    class="w-full p-2 hover:bg-gray-100 hover:dark:bg-flat-black-100 text-left rounded-xl"
+    @click="searchPath(props.directory.fullPath)"
+  >
     {{ props.directory.name }}
   </button>
   <div v-if="props.directory.children.length > 0" class="flex flex-row">
@@ -23,6 +32,7 @@ const props = defineProps<{
         :key="index"
         :directory="child"
         :depth="props.depth + 1"
+        @search-path="searchPath"
       />
     </div>
   </div>

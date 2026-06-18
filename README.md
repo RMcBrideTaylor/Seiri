@@ -13,11 +13,15 @@ I started with Electron because it's an easy jumping off point to quickly get so
 **Some wishlist items of things I intend to do soon:**
 - [ ] JPEG, PNG, GIF support
 - [ ] Grid resizing in the main feed
-- [ ] The ability to filter photos by containing folder
-- [ ] Image tagging and search
-- [ ] Light mode / theming 
+- [x] The ability to filter photos by containing folder
+- [ ] Dynamic re-indexing through watched folder
+- [x] Image tagging
+- [x] Search
+- [x] Light mode
+- [ ] Theming 
 - [ ] Re-write in a more event-based manner to intelligently trigger re-indexing when needed 
-- [ ] Pull in metadata from images if available
+- [x] Pull in metadata from images if available
+- [ ] Index Metadata and make it searchable
 - [ ] Batch tag using select
 
 

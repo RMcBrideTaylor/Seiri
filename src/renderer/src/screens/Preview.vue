@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import * as ExifReader from 'exifreader'
 
 interface File {
   id: number
@@ -21,11 +22,46 @@ const route = useRoute()
 const file = ref<File | null>(null)
 const showingMenu = ref(false)
 const newTag = ref('')
+const data = ref()
 
 const open = (): void => {
-  window.electron.ipcRenderer.invoke('action:openFile', route.params.id).then((res) => {
-    file.value = res
-  })
+  window.electron.ipcRenderer
+    .invoke('action:openFile', route.params.id)
+    .then((res) => {
+      file.value = res
+    })
+    .finally(() => {
+      loadMeta()
+    })
+}
+
+const loadMeta = async (): Promise<void> => {
+  if (file.value) {
+    window.electron.ipcRenderer.invoke('action:readFile', file.value.path).then(async (res) => {
+      if (res) {
+        const properties = ['Artist', 'Make', 'Model', 'Lens', 'DateCreated']
+        const exif = await ExifReader.load(res.buffer)
+
+        var mapped = {}
+
+        properties.forEach((p) => {
+          if (exif[p]) {
+            if (typeof exif[p].value === 'object') {
+              mapped[p] = exif[p].value[0]
+            } else {
+              mapped[p] = exif[p].value
+            }
+          }
+        })
+
+        data.value = mapped
+      }
+    })
+  }
+}
+
+const refreshMain = (): void => {
+  window.electron.ipcRenderer.send('action:refresh')
 }
 
 const addTag = (): void => {
@@ -38,6 +74,8 @@ const addTag = (): void => {
 
       file.value.tags.push(res)
       newTag.value = ''
+
+      refreshMain()
     })
 }
 
@@ -50,6 +88,7 @@ const removeTag = (id): void => {
       }
 
       file.value.tags = file.value.tags.filter((t) => t.id !== id)
+      refreshMain()
     })
 }
 
@@ -67,6 +106,8 @@ const rate = (rate): void => {
     if (file.value != null) {
       file.value.rating = payload.rating
     }
+
+    refreshMain()
   })
 }
 
@@ -128,6 +169,9 @@ onMounted(() => {
               <span class="material-icons" style="vertical-align: bottom">close</span>
             </button>
           </TransitionGroup>
+        </div>
+        <div v-if="data">
+          <p v-for="(dataPoint, index) in data" :key="index"><b>{{ index }}:</b> {{ dataPoint }}</p>
         </div>
       </div>
     </Transition>

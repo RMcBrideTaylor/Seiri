@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 const emit = defineEmits(['refresh', 'addFilter', 'removeFilter', 'search', 'collapse'])
 const filter = ref('')
@@ -16,16 +16,26 @@ const removeFilter = (f): void => {
   emit('removeFilter', f)
   filters.value = filters.value.filter((i) => i !== f)
 }
+
+const clearSearch = (): void => {
+  search.value = ''
+  emit('search', '')
+}
 </script>
 
 <template>
   <div class="flex-none flex flex-col justify-center content-center gap-4">
-    <input
-      v-model="search"
-      placeholder="search"
-      class="w-1/2 mx-auto text-center p-2 rounded-full dark:bg-flat-black-500 dark:hover:bg-flat-black-100 border border-flat-black-100 focus:outline focus:outline-red-500"
-      @keydown.enter="$emit('search', search)"
-    />
+    <div class="mx-auto w-1/2 flex flex-row gap-2">
+      <input
+        v-model="search"
+        placeholder="search"
+        class="w-1/2 grow text-center p-2 rounded-full dark:bg-flat-black-500 dark:hover:bg-flat-black-100 border border-flat-black-100 focus:outline focus:outline-red-500"
+        @keydown.enter="$emit('search', search)"
+      />
+      <button v-if="search != ''" class="cursor-pointer" @click="clearSearch">
+        <span class="material-icons" style="vertical-align: middle">clear</span>
+      </button>
+    </div>
     <div class="flex flex-row">
       <div class="md:w-1/5">
         <button

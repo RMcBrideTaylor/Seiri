@@ -8,12 +8,18 @@ interface Directory {
   children: Directory[]
 }
 
+const emit = defineEmits(['searchPath'])
+
 const directories = ref<Directory[]>([])
 
 const listDirectories = (): void => {
   window.electron.ipcRenderer.invoke('action:listDirectories').then((res) => {
     directories.value = res
   })
+}
+
+const searchPath = (path): void => {
+  emit('searchPath', path)
 }
 
 onMounted(() => {
@@ -29,6 +35,7 @@ onMounted(() => {
         :key="index"
         :directory="directory"
         :depth="1"
+        @search-path="searchPath"
       />
     </div>
   </div>

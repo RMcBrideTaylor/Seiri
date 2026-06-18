@@ -59,6 +59,7 @@ export default class SeiriApp {
       width: 900,
       height: 670,
       show: true,
+      title: 'Home',
       titleBarStyle: 'hidden',
       autoHideMenuBar: true,
       ...(process.platform === 'linux' ? { icon } : {}),
@@ -71,6 +72,10 @@ export default class SeiriApp {
     mainWindow.webContents.setWindowOpenHandler((details) => {
       shell.openExternal(details.url)
       return { action: 'deny' }
+    })
+
+    mainWindow.webContents.on('did-finish-load', () => {
+      mainWindow.setTitle('Main')
     })
 
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {

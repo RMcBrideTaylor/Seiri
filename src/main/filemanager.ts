@@ -186,6 +186,7 @@ export class FileManager {
         directories.push({
           name: path.basename(entry),
           path: path.relative(this.directory, entry),
+          fullPath: entry,
           children: []
         })
       }
@@ -212,6 +213,7 @@ export class FileManager {
       {
         name: path.basename(this.directory),
         path: '',
+        fullPath: this.directory,
         children: directories
       }
     ]
@@ -232,6 +234,7 @@ export class FileManager {
 type Directory = {
   name: string
   path: string
+  fullPath: string
   children: Directory[]
 }
 

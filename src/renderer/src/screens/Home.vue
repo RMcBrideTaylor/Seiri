@@ -27,6 +27,7 @@ const files = ref<File[]>([])
 const filesLoading = ref(true)
 const showMenu = ref(true)
 const filters = ref<string[]>([])
+const searchString = ref<string>('')
 
 const state = ref(ScreenState.loading)
 
@@ -48,7 +49,11 @@ const removeFilter = (filter): void => {
 }
 
 const search = (search): void => {
-  console.log(search)
+  searchString.value = search
+}
+
+const searchPath = (path): void => {
+  searchString.value = path
 }
 
 const open = (fileId): void => {
@@ -82,13 +87,24 @@ const listFiles = (): void => {
 const feed = computed(() => {
   var values = files.value
   if (filters.value.length > 0) {
-    values = values.filter((i) => i.tags.flatMap((m) => m.name).some((a) => filters.value.includes(a)))
+    values = values.filter((i) =>
+      i.tags.flatMap((m) => m.name).some((a) => filters.value.includes(a))
+    )
   }
+
+  if (searchString.value != '') {
+    values = values.filter((s) => s.path.includes(searchString.value))
+  }
+  
   return values
 })
 
 onMounted(() => {
   listFiles()
+})
+
+window.electron.ipcRenderer.on('refresh', () => {
+  refresh()
 })
 </script>
 
@@ -103,7 +119,7 @@ onMounted(() => {
     />
     <div class="grow flex flex-col md:flex-row overflow-hidden">
       <Transition>
-        <Sidebar v-if="showMenu" />
+        <Sidebar v-if="showMenu" @search-path="searchPath" />
       </Transition>
       <Feed v-model="feed" @rate="rate" @open="open" />
     </div>
