@@ -5,6 +5,7 @@ import MenuItem from './MenuItem.vue'
 interface Directory {
   name: string
   path: string
+  fullPath: string
   children: Directory[]
 }
 
