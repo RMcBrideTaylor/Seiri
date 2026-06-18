@@ -18,7 +18,7 @@ const router = useRouter()
 
 // Functions
 const openExisting = (): void => {
-   window.electron.ipcRenderer.invoke('dialog:openCollection').then((res) => {
+   window.electron.ipcRenderer.invoke('dialog:openCollection').then(() => {
     router.push('/home')
    })
 }
@@ -32,7 +32,7 @@ const saveNew = (): void => {
   state.value = ScreenState.loading
   window.electron.ipcRenderer
     .invoke('dialog:saveCollection', [saveLocation.value, collectionName.value])
-    .then((res) => {
+    .then(() => {
       router.push('/home')
     })
 }

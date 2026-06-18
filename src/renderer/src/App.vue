@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
-var isLoaded = ref(false)
 </script>
 
 <template>

@@ -4,8 +4,10 @@ import { files } from './file'
 
 export const tags = sqliteTable('tags', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
-  name: text(),
-  created: integer({ mode: 'timestamp' }).default(sql`(CURRENT_TIMESTAMP)`)
+  name: text().notNull(),
+  created: integer({ mode: 'timestamp' })
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull()
 })
 
 export const filesToTags = sqliteTable('tags_files', {

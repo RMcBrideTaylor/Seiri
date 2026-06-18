@@ -1,11 +1,12 @@
-import { app, shell, BrowserWindow, protocol, net, Menu } from 'electron'
+import { app, shell, BrowserWindow, protocol, net } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import registerCommands from './commands'
 
 export default class SeiriApp {
-  private mainWindow
+  // @ts-ignore 'I plan to use this later'
+  private mainWindow: BrowserWindow | null
   private modelID: string = 'com.seiri'
 
   constructor() {

@@ -47,14 +47,16 @@ const removeFilter = (filter): void => {
   filters.value = filters.value.filter((i) => i != filter)
 }
 
-const search = (search): void => {}
+const search = (search): void => {
+  console.log(search)
+}
 
 const open = (fileId): void => {
   window.electron.ipcRenderer.send('action:openPreview', fileId)
 }
 
 const rate = (rate): void => {
-  window.electron.ipcRenderer.invoke('action:rateFile', rate).then((res) => {
+  window.electron.ipcRenderer.invoke('action:rateFile', rate).then(() => {
     const id = files.value.findIndex((i) => i.id == rate.id)
     files.value[id].rating = rate.rating
   })

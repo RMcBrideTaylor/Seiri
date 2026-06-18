@@ -36,8 +36,20 @@ const addTag = (): void => {
         return
       }
 
-      file.value.tags = res
+      file.value.tags.push(res)
       newTag.value = ''
+    })
+}
+
+const removeTag = (id): void => {
+  window.electron.ipcRenderer
+    .invoke('action:removeTag', { id: route.params.id, tagId: id })
+    .then(() => {
+      if (!file.value) {
+        return
+      }
+
+      file.value.tags = file.value.tags.filter((t) => t.id !== id)
     })
 }
 
@@ -51,7 +63,7 @@ const rate = (rate): void => {
     rating: rate.rating.target.value
   }
 
-  window.electron.ipcRenderer.invoke('action:rateFile', payload).then((res) => {
+  window.electron.ipcRenderer.invoke('action:rateFile', payload).then(() => {
     if (file.value != null) {
       file.value.rating = payload.rating
     }
@@ -102,18 +114,24 @@ onMounted(() => {
           <input
             v-model="newTag"
             placeholder="add tag"
-            class="w-full bg-flat-black-100 rounded-2xl p-2 text-center focus:outline focus:outline-red-500"
+            class="w-full bg-flat-black-500 hover:bg-flat-black-100 hover:scale-105 rounded-2xl p-2 text-center focus:outline focus:outline-red-500"
             @keydown.enter="addTag"
           />
-          <div class="flex flex-row my-4">
-            <button v-for="(tag, index) in file.tags" :key="index" class="bg-red-500 rounded-2xl py-2 px-3">
-                {{ tag.name }}
+          <TransitionGroup tag="button" class="flex flex-row my-4 gap-2">
+            <button
+              v-for="(tag, index) in file.tags"
+              :key="index"
+              class="bg-red-500 rounded-2xl py-2 px-3"
+              @click="removeTag(tag.id)"
+            >
+              {{ tag.name }}
+              <span class="material-icons" style="vertical-align: bottom">close</span>
             </button>
-          </div>
+          </TransitionGroup>
         </div>
       </div>
     </Transition>
 
-    <img :src="'smag://' + file.path" class="max-h-full mx-auto" />
+    <img :src="'smag://' + file.path" class="max-h-full mx-auto my-auto" />
   </div>
 </template>

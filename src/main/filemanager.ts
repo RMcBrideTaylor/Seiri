@@ -77,11 +77,24 @@ export class FileManager {
     return t[0]
   }
 
+  async removeTag(id: number, tagId: number): Promise<void> {
+    if (this.db == null || this.directory == null) {
+      process.exit(1)
+    }
+    
+    await this.db
+      .delete(filesToTags)
+      .where(and(eq(filesToTags.fileId, id), eq(filesToTags.tagId, tagId)))
+
+    return
+  }
+
   async getFile(id): Promise<File> {
     if (this.db == null || this.directory == null) {
       process.exit(1)
     }
 
+    // @ts-ignore 'This is actually correct, I need to figure out why it's not detecting it'
     const res = await this.db.query.files.findMany({
       where: {
         id: id
@@ -129,13 +142,13 @@ export class FileManager {
       // @TODO - Clear out any files that no longer exist in the index
     }
 
-    
     return
   }
 
   async listFiles(): Promise<File[]> {
     if (!this.directory || !this.db) process.exit(1)
 
+    // @ts-ignore 'This is actually correct, I need to figure out why it's not detecting it'
     const res = await this.db.query.files.findMany({
       with: {
         tags: true
