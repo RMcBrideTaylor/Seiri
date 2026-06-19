@@ -62,7 +62,7 @@ export default class SeiriApp {
       title: 'Home',
       titleBarStyle: 'hidden',
       autoHideMenuBar: true,
-      ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {}),
+      ...(process.platform !== 'darwin' ? { titleBarOverlay: true, titleBarStyle: 'default' } : {}),
       ...(process.platform === 'linux' ? { icon } : {}),
       webPreferences: {
         preload: join(__dirname, '../preload/index.js'),
@@ -113,7 +113,13 @@ export default class SeiriApp {
 
   private setProtocolHandler(): void {
     protocol.handle('smag', (request) => {
-      const filePath = request.url.replace('smag://', 'file:///')
+      let filePath
+      if (process.platform === 'darwin') {
+        filePath = request.url.replace('smag://', 'file:///')
+      } else {
+        filePath = request.url.replace('smag://', 'file://')
+      }
+
       return net.fetch(filePath)
     })
   }
