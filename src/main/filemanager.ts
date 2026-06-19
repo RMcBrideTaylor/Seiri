@@ -226,13 +226,23 @@ export class FileManager {
     }
 
     // Sort by longest path
-    directories.sort((a, b) => {
-      if (a && b) {
-        return b.path.split('/').length - a.path.split('/').length
-      } else {
-        return 0
-      }
-    })
+    if (process.platform !== 'win32') {
+      directories.sort((a, b) => {
+        if (a && b) {
+          return b.path.split('/').length - a.path.split('/').length
+        } else {
+          return 0
+        }
+      })
+    } else {
+      directories.sort((a, b) => {
+        if (a && b) {
+          return b.path.split('\\\\').length - a.path.split('\\\\').length
+        } else {
+          return 0
+        }
+      })
+    }
 
     let index = 0
     for (const directory of [...directories]) {
