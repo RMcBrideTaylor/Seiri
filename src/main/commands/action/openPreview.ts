@@ -28,7 +28,7 @@ export default function openPreview(): void {
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       newWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + `/#/preview/${id}`)
     } else {
-      newWindow.loadFile(join(__dirname, '../renderer/index.html' + `/#/preview/${id}`))
+      newWindow.loadURL(`file://${join(__dirname, '../renderer/index.html')}#/preview/${id}`)
     }
   })
 }
