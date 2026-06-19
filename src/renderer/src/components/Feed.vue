@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import ImageCard from './ImageCard.vue'
+import Loading from './Loading.vue'
 
 const model = defineModel<File[]>({ default: [] })
 const emit = defineEmits(['rate', 'open'])
@@ -39,7 +40,7 @@ const observer = new IntersectionObserver(
   {
     root: null,
     rootMargin: '0px',
-    threshold: 0.1
+    threshold: 1.0
   }
 )
 
@@ -90,7 +91,9 @@ onMounted(() => {
           </template>
         </TransitionGroup>
       </div>
-      <div id="loadAnchor" />
+      <div v-if="pageLength < model.length" id="loadAnchor" class="text-center col-span-3">
+        <Loading />
+      </div>
     </div>
   </div>
 </template>
