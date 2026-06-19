@@ -29,7 +29,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="md:w-1/5 rounded-2xl p-3 shadow-xl mb-4 dark:bg-flat-black-500 overflow-y-auto">
+  <div class="h-full rounded-2xl p-3 shadow-xl mb-4 dark:bg-flat-black-500 overflow-y-auto">
     <div class="pb-6">
       <MenuItem
         v-for="(directory, index) in directories"

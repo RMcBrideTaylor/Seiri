@@ -1,5 +1,6 @@
 // Actions
 import addTag from './action/addTag'
+import batchTag from './action/batchTag'
 import indexFiles from './action/indexFiles'
 import listDirectories from './action/listDirectories'
 import listFiles from './action/listFiles'
@@ -25,6 +26,7 @@ export default function registerCommands(): void {
   readFile()
 
   addTag()
+  batchTag()
   removeTag()
 
   refresh()

@@ -68,13 +68,28 @@ export class FileManager {
         .returning()
     }
 
-    // Associate it with the file by id
-    await this.db.insert(filesToTags).values({
-      fileId: id,
-      tagId: t[0].id
-    })
+    if (
+      (
+        await this.db
+          .select()
+          .from(filesToTags)
+          .where(and(eq(filesToTags.fileId, id), eq(filesToTags.tagId, t[0].id)))
+      ).length == 0
+    ) {
+      // Associate it with the file by id
+      await this.db.insert(filesToTags).values({
+        fileId: id,
+        tagId: t[0].id
+      })
+    }
 
     return t[0]
+  }
+
+  async batchTag(selected: number[], tag: string): Promise<void> {
+    for (const selection of selected) {
+      this.addTag(selection, tag)
+    }
   }
 
   async removeTag(id: number, tagId: number): Promise<void> {
