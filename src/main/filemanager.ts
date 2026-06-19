@@ -180,7 +180,7 @@ export class FileManager {
     if (!this.directory) process.exit(1)
 
     // Get the original list of all the directories
-    const directories: Directory[] = []
+    const directories: (Directory | null)[] = []
     for await (const entry of glob(this.directory + '/**/')) {
       if (path.relative(this.directory, entry) == '') {
         continue
@@ -195,33 +195,43 @@ export class FileManager {
     }
 
     // Sort by longest path
-    directories.sort((a, b) => b.path.split('/').length - a.path.split('/').length)
-    console.log(directories)
-    console.log('-------')
+    directories.sort((a, b) => {
+      if (a && b) {
+        return b.path.split('/').length - a.path.split('/').length
+      } else {
+        return 0
+      }
+    })
 
     let index = 0
     for (const directory of [...directories]) {
-      console.log(directory)
       // Only look for nested paths so we can skip checking *every* path against every other one
-      if (directory.path.includes('/')) {
+      if (directory != null && directory.path.includes('/')) {
         // Check if directories list contains the path minus the last section
-        const loc = directories.findIndex((d) => d.path == path.dirname(directory.path))
+        const loc = directories.findIndex((d) => {
+          if (d != null) {
+            return d.path == path.dirname(directory.path)
+          } else {
+            return false
+          }
+        })
 
-        if (loc) {
+        if (loc && directories[loc] != null) {
           directories[loc].children.push(directory)
-          directories.splice(index, 1)
+          directories[index] = null
         }
       }
       index = index + 1
     }
-    directories.sort((a, b) => a.path.length - b.path.length)
+    const filtered: Directory[] = directories.filter((i) => i != null)
+    filtered.sort((a, b) => a.path.length - b.path.length)
 
     return [
       {
         name: path.basename(this.directory),
         path: '',
         fullPath: this.directory,
-        children: directories
+        children: filtered
       }
     ]
   }
