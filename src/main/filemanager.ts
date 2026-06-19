@@ -6,7 +6,7 @@ import { eq, like, and } from 'drizzle-orm'
 import { files } from './db/file'
 import { filesToTags, tags } from './db/tag'
 
-import { createReadStream } from 'node:fs'
+import { access, constants, createReadStream } from 'node:fs'
 import path from 'node:path'
 import { createHash } from 'node:crypto'
 import { glob } from 'node:fs/promises'
@@ -81,7 +81,7 @@ export class FileManager {
     if (this.db == null || this.directory == null) {
       process.exit(1)
     }
-    
+
     await this.db
       .delete(filesToTags)
       .where(and(eq(filesToTags.fileId, id), eq(filesToTags.tagId, tagId)))
@@ -134,7 +134,6 @@ export class FileManager {
         .where(and(eq(files.hash, hash), like(files.path, '%' + path.basename(file) + '%')))
 
       if (matches.length < 1) {
-        console.log('Indexing: ' + file)
         await this.db.insert(files).values({
           path: path.relative(this.directory, file),
           hash: hash
@@ -142,9 +141,26 @@ export class FileManager {
       }
 
       // @TODO - Clear out any files that no longer exist in the index
+      this.clearDeletedFiles()
     }
 
     return
+  }
+
+  async clearDeletedFiles(): Promise<void> {
+    if (this.db == null || this.directory == null) {
+      process.exit(1)
+    }
+
+    const records = await this.db.select().from(files)
+
+    for (const record of records) {
+      access(this.directory + '/' + record.path, constants.F_OK, async (err) => {
+        if (err && this.db) {
+          await this.db.delete(files).where(eq(files.id, record.id))
+        }
+      })
+    }
   }
 
   async listFiles(): Promise<File[]> {
