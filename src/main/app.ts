@@ -113,13 +113,7 @@ export default class SeiriApp {
 
   private setProtocolHandler(): void {
     protocol.handle('smag', (request) => {
-      let filePath
-      if (process.platform === 'darwin') {
-        filePath = request.url.replace('smag://', 'file:///')
-      } else {
-        filePath = request.url.replace('smag://', 'file://')
-      }
-
+      const filePath = request.url.replace('smag://', 'file:///')
       return net.fetch(filePath)
     })
   }
