@@ -171,11 +171,14 @@ onMounted(() => {
           </TransitionGroup>
         </div>
         <div v-if="data">
-          <p v-for="(dataPoint, index) in data" :key="index"><b>{{ index }}:</b> {{ dataPoint }}</p>
+          <p v-for="(dataPoint, index) in data" :key="index">
+            <b>{{ index }}:</b> {{ dataPoint }}
+          </p>
         </div>
       </div>
     </Transition>
-
-    <img :src="'smag://' + file.path" class="max-h-full mx-auto my-auto" />
+    <div class="h-screen flex flex-col justify-center">
+        <img :src="'smag://' + file.path" class="max-h-full mx-auto" />
+    </div>
   </div>
 </template>
