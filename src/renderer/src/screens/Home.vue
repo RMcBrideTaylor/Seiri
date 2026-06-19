@@ -55,8 +55,12 @@ const search = (search): void => {
   searchString.value = search
 }
 
-const searchPath = (path): void => {
-  searchString.value = path + '/'
+const searchPath = (pathQuery): void => {
+  if (pathQuery.path !== pathQuery.home) {
+    searchString.value = pathQuery.path + '/'
+  } else {
+    searchString.value = pathQuery.path
+  }
 }
 
 const open = (fileId): void => {
@@ -113,7 +117,9 @@ const feed = computed(() => {
   }
 
   if (searchString.value != '') {
+    console.log(searchString.value)
     values = values.filter((s) => s.path.includes(searchString.value))
+    console.log(values[3].path)
   }
   return values
 })

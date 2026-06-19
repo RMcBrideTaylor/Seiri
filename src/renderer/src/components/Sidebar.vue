@@ -20,7 +20,9 @@ const listDirectories = (): void => {
 }
 
 const searchPath = (path): void => {
-  emit('searchPath', path)
+  if (directories.value[0] != null) {
+    emit('searchPath', { path: path, home: directories.value[0].fullPath })
+  }
 }
 
 onMounted(() => {
