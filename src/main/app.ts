@@ -113,8 +113,16 @@ export default class SeiriApp {
 
   private setProtocolHandler(): void {
     protocol.handle('smag', (request) => {
-      const filePath = request.url.replace('smag://', 'file:///')
-      return net.fetch(filePath)
+      let filePath = request.url.replace('smag://', '')
+
+      //@TODO - This is a dumb hack, find a way to fix this
+      if (process.platform == 'win32') {
+        const replace = filePath.split('/')[0]
+        const regex = new RegExp(`^${replace}`)
+        filePath = filePath.replace(regex, replace.toUpperCase() + ':/')
+      }
+
+      return net.fetch(`file:///${filePath}`)
     })
   }
 
