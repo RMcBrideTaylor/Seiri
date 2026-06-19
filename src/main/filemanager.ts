@@ -17,16 +17,25 @@ export class FileManager {
   private static instance: FileManager | null = null
   private db: BetterSQLite3Database | null = null
   private directory: string | null = null
+  private systemFileSeparator: string = '/'
 
   public static getInstance(): FileManager {
     if (!FileManager.instance) {
       FileManager.instance = new FileManager()
+
+      if (process.platform === 'win32') {
+        FileManager.instance.setFileSeparator('\\')
+      }
     }
     return FileManager.instance
   }
 
+  setFileSeparator(sep: string): void {
+    this.systemFileSeparator = sep
+  }
+
   createCollection(dest: string[]): void {
-    const location = dest[0] + '/' + dest[1] + '.scol'
+    const location = dest[0] + this.systemFileSeparator + dest[1] + '.scol'
     // Create sqlite file
     new Database(location, { verbose: console.log })
 
@@ -122,7 +131,7 @@ export class FileManager {
     return res.map((i) => {
       return {
         ...i,
-        path: this.directory + '/' + i.path
+        path: this.directory + this.systemFileSeparator + i.path
       }
     })[0]
   }
@@ -170,7 +179,7 @@ export class FileManager {
     const records = await this.db.select().from(files)
 
     for (const record of records) {
-      access(this.directory + '/' + record.path, constants.F_OK, async (err) => {
+      access(this.directory + this.systemFileSeparator + record.path, constants.F_OK, async (err) => {
         if (err && this.db) {
           await this.db.delete(files).where(eq(files.id, record.id))
         }
@@ -191,7 +200,7 @@ export class FileManager {
     return res.map((i) => {
       return {
         ...i,
-        path: this.directory + '/' + i.path
+        path: this.directory + this.systemFileSeparator + i.path
       }
     })
   }
@@ -226,28 +235,21 @@ export class FileManager {
     }
 
     // Sort by longest path
-    if (process.platform !== 'win32') {
-      directories.sort((a, b) => {
-        if (a && b) {
-          return b.path.split('/').length - a.path.split('/').length
-        } else {
-          return 0
-        }
-      })
-    } else {
-      directories.sort((a, b) => {
-        if (a && b) {
-          return b.path.split('\\\\').length - a.path.split('\\\\').length
-        } else {
-          return 0
-        }
-      })
-    }
+    directories.sort((a, b) => {
+      if (a && b) {
+        return (
+          b.path.split(this.systemFileSeparator).length -
+          a.path.split(this.systemFileSeparator).length
+        )
+      } else {
+        return 0
+      }
+    })
 
     let index = 0
     for (const directory of [...directories]) {
       // Only look for nested paths so we can skip checking *every* path against every other one
-      if (directory != null && directory.path.includes('/')) {
+      if (directory != null && directory.path.includes(this.systemFileSeparator)) {
         // Check if directories list contains the path minus the last section
         const loc = directories.findIndex((d) => {
           if (d != null) {
