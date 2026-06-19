@@ -29,7 +29,7 @@ const filesLoading = ref(true)
 const showMenu = ref(true)
 const filters = ref<string[]>([])
 const searchString = ref<string>('')
-const selections = ref<string[]>([])
+const selections = ref<number[]>([])
 const tag = ref<string>('')
 
 const state = ref(ScreenState.loading)
