@@ -117,9 +117,7 @@ const feed = computed(() => {
   }
 
   if (searchString.value != '') {
-    console.log(searchString.value)
     values = values.filter((s) => s.path.includes(searchString.value))
-    console.log(values[3].path)
   }
   return values
 })
