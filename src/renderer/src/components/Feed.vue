@@ -26,6 +26,8 @@ const open = (fileId): void => {
 
 const loadMoreContent = (): void => {
   pageLength.value = pageLength.value + 9
+  console.log(pageLength.value)
+  console.log(model.value.length)
 }
 
 const observer = new IntersectionObserver(
