@@ -29,6 +29,8 @@ const filesLoading = ref(true)
 const showMenu = ref(true)
 const filters = ref<string[]>([])
 const searchString = ref<string>('')
+const selections = ref<string[]>([])
+const tag = ref<string>('')
 
 const state = ref(ScreenState.loading)
 
@@ -68,6 +70,23 @@ const rate = (rate): void => {
   })
 }
 
+const batchTag = (): void => {
+  window.electron.ipcRenderer
+    .invoke('action:batchTag', { selected: JSON.stringify(selections.value), tag: tag.value })
+    .then(() => {
+      tag.value = ''
+      selections.value = []
+    })
+}
+
+const selected = (id): void => {
+  if (selections.value.includes(id)) {
+    selections.value = selections.value.filter((i) => i !== id)
+  } else {
+    selections.value.push(id)
+  }
+}
+
 const refresh = (): void => {
   console.log('Refreshing...')
   listFiles()
@@ -96,7 +115,6 @@ const feed = computed(() => {
   if (searchString.value != '') {
     values = values.filter((s) => s.path.includes(searchString.value))
   }
-  
   return values
 })
 
@@ -119,10 +137,28 @@ window.electron.ipcRenderer.on('refresh', () => {
       @search="search"
     />
     <div class="grow flex flex-col md:flex-row overflow-hidden">
-      <Transition>
-        <Sidebar v-if="showMenu" @search-path="searchPath" />
-      </Transition>
-      <Feed v-if="!filesLoading" v-model="feed" @rate="rate" @open="open" />
+      <div class="flex flex-col gap-4 h-full" :class="{ 'md:w-1/5': showMenu }">
+        <TransitionGroup>
+          <div v-if="selections.length > 0" class="p-3">
+            <input
+              v-model="tag"
+              placeholder="Batch Tag"
+              class="w-full text-center p-2 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-flat-black-500 dark:hover:bg-flat-black-100 focus:outline focus:outline-red-500 mt-2"
+              @keydown.enter="batchTag"
+            />
+          </div>
+          <Sidebar v-if="showMenu" @search-path="searchPath" />
+        </TransitionGroup>
+      </div>
+      <div v-if="!filesLoading" class="md:w-4/5 mx-auto overflow-y-auto">
+        <Feed
+          v-model:feed="feed"
+          v-model:selections="selections"
+          @rate="rate"
+          @open="open"
+          @selected="selected"
+        />
+      </div>
       <Loading v-else />
     </div>
   </div>
