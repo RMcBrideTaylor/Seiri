@@ -3,6 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import registerCommands from './commands'
+import { FileManager } from './filemanager'
 
 export default class SeiriApp {
   // @ts-ignore 'I plan to use this later'
@@ -84,6 +85,19 @@ export default class SeiriApp {
     } else {
       mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     }
+
+    app.on('open-file', (event, filePath) => {
+      event.preventDefault()
+      // Create an instance
+      const fileManager = FileManager.getInstance()
+      fileManager.loadCollection(filePath)
+
+      if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+        mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + `/#/home`)
+      } else {
+        mainWindow.loadURL(`file://${join(__dirname, '../renderer/index.html')}#/home`)
+      }
+    })
 
     return mainWindow
   }

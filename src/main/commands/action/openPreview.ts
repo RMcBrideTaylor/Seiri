@@ -13,6 +13,7 @@ export default function openPreview(): void {
       titleBarStyle: 'hidden',
       autoHideMenuBar: true,
       title: 'Preview',
+      ...(process.platform !== 'darwin' ? { titleBarOverlay: true, titleBarStyle: 'default' } : {}),
       ...(process.platform === 'linux' ? { icon } : {}),
       webPreferences: {
         preload: join(__dirname, '../preload/index.js'),
